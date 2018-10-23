@@ -98,15 +98,10 @@ console.log(clicked.path[0].className === "card");
         else if (classClicked === matchingCards[0]) {
           clicked.path[0].className = "card match";
           mouseEvent[0].className = "card match";
-          console.log(matchingCards);
-          console.log(classClicked);
-          console.log(mouseEvent);
           matchingCards = [];
           mouseEvent = [];
           break;
         }
-
-
       }
     }
   }
