@@ -2,24 +2,24 @@
  * Create a list that holds all of your cards
  */
 
-
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
-
 // Initializing array cardClass to store the values of the icon classes
 var cardClass = ["fa fa-diamond", "fa fa-paper-plane-o", "fa fa-anchor", "fa fa-bolt", "fa fa-cube", "fa fa-leaf", "fa fa-bicycle", "fa fa-bomb",
                   "fa fa-diamond", "fa fa-paper-plane-o", "fa fa-anchor", "fa fa-bolt", "fa fa-cube", "fa fa-leaf", "fa fa-bicycle", "fa fa-bomb", ];
 
-//matchingCards is where the value of the class of the card is stored
-let matchingCards = [];
-//
+//openCards is where the value of the opened cards are stored
+let openCards = [];
+
+//mouseEvent stores the value of the first and second clicked element
 let mouseEvent = [];
 
+//moveCounter tracks how many moves the player have done
+let moveCounter = 0;
+
+//matchedCards tracks how many matches there are already
+let matchedCards = 0;
+
 //function initializeDeck() {
+
   //assigning shuffled cardClass array into the same array
   cardClass = shuffle(cardClass);
 
@@ -50,68 +50,116 @@ let mouseEvent = [];
 
     return copy;
   }
-
-  //Initiating event listener
+  //Initiating event listener for the container class
   var clickScreen = document.querySelector(".container");
   clickScreen.addEventListener('click', function(event) {
       checkClass(event);
-    //console.log(event.path[0].childNodes[1].className);
   });
-
+  console.log(active);
 
   //function checkClass accepts a mouse event parameter and checks what class was clicked by the user.
   function checkClass(clicked) {
+    startTimer();
+
     //assigning the name of the class to the classclicked string
     const classClicked = clicked.path[0].childNodes[1].className;
-console.log(clicked.path[0].className === "card");
+
     //for loop to check if cards are clicked
     for (var i = 0; i < cardClass.length; i++) {
+
+      //checks if the card that was clicked is a class of card
       if (classClicked === cardClass[i] && clicked.path[0].className === "card")
       {
+        active = true;
 
-        console.log(clicked.path[0].className);
-        console.log(clicked);
+        //increment moveCounter
+        moveCounter++;
+        console.log(moveCounter);
+        console.log(openCards);
         console.log(mouseEvent);
         setTimeout (function() {
-            if (matchingCards.length === 2) {
-            mouseEvent[0].className = "card";
-            mouseEvent[1].className = "card";
-            mouseEvent = [];
-            matchingCards = [];
+
+            //checks if there are already two open cards which sets a 1 sec delay
+            if (openCards.length === 2) {
+              mouseEvent[0].className = "card";
+              mouseEvent[1].className = "card";
+              mouseEvent = [];
+              openCards = [];
             }
         }, 1000);
 
-        if (classClicked !== matchingCards[0]) {
+        if (classClicked !== openCards[0]) {
+
+          //sets the class of the clicked card to open
           clicked.path[0].className = "card open show";
-            //checking if there are already two open cards
-            if (matchingCards.length === 2) {
-              matchingCards = [];
+
+            //checking if there are already two matching cards
+            if (openCards.length === 2) {
+              openCards = [];
               mouseEvent = [];
             }
+
             else {
-              matchingCards.push(classClicked);
+              openCards.push(classClicked);
               mouseEvent.push(clicked.path[0]);
             }
           break;
         }
 
-        else if (classClicked === matchingCards[0]) {
+        else if (classClicked === openCards[0]) {
+
+          //sets class of card to match
           clicked.path[0].className = "card match";
           mouseEvent[0].className = "card match";
-          matchingCards = [];
+          openCards = [];
           mouseEvent = [];
+          matchedCards++;
           break;
         }
+
+
       }
     }
+    //calls movesCount where it display the moveCounter to the HTML
+    movesCount(moveCounter);
   }
-
-
 
   function cardMatch(classOfCard) {
 
   }
 
+  function movesCount(moveCounter) {
+    document.querySelector('.moves').innerHTML = moveCounter;
+
+  }
+
+  //active is a bollean variable to keep track of the time
+  var active = false;
+
+  //startTimer is a function that
+  function startTimer() {
+    if(active) {
+      var timer = document.getElementById("timer").innerHTML;
+      //split the time to two arrays
+      var time = timer.split(":");
+      var minutes = time[0];
+      var seconds = time[1];
+
+      if (seconds == 59) {
+        minutes++
+        seconds = 0;
+        if (minutes < 10) minutes = "0" + minutes;
+      }
+      else {
+        seconds++;
+        if (seconds < 10) seconds = "0" + seconds;
+      }
+
+      //update HTML timer ID on
+      document.getElementById("timer").innerHTML = minutes + ":" + seconds;
+      setTimeout(startTimer, 1000);
+    }
+  }
 /*
  * set up the event listener for a card. If a card is clicked:
  *  - display the card's symbol (put this functionality in another function that you call from this one)
