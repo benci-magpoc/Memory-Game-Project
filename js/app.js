@@ -18,6 +18,8 @@ let moveCounter = 0;
 //matchedCards tracks how many matches there are already
 let matchedCards = 0;
 
+//lockboard variable will lock the board to prevent clicking more than two
+let lockboard = false;
 //function initializeDeck() {
 
   //assigning shuffled cardClass array into the same array
@@ -53,57 +55,57 @@ let matchedCards = 0;
   //Initiating event listener for the container class
   var clickScreen = document.querySelector(".container");
   clickScreen.addEventListener('click', function(event) {
+      if (lockboard) return;
       checkClass(event);
   });
-  console.log(active);
 
   //function checkClass accepts a mouse event parameter and checks what class was clicked by the user.
   function checkClass(clicked) {
-    startTimer();
+    //startTimer();
 
     //assigning the name of the class to the classclicked string
     const classClicked = clicked.path[0].childNodes[1].className;
 
     //for loop to check if cards are clicked
-    for (var i = 0; i < cardClass.length; i++) {
+    //for (var i = 0; i < cardClass.length; i++) {
 
       //checks if the card that was clicked is a class of card
-      if (classClicked === cardClass[i] && clicked.path[0].className === "card")
+      if (clicked.path[0].className === "card")
       {
-        active = true;
+        if (!active)
+        {
+          active = true;
+          startTimer();
+        }
 
         //increment moveCounter
         moveCounter++;
         console.log(moveCounter);
         console.log(openCards);
         console.log(mouseEvent);
-        setTimeout (function() {
+
 
             //checks if there are already two open cards which sets a 1 sec delay
-            if (openCards.length === 2) {
-              mouseEvent[0].className = "card";
-              mouseEvent[1].className = "card";
-              mouseEvent = [];
-              openCards = [];
-            }
-        }, 1000);
+
 
         if (classClicked !== openCards[0]) {
 
           //sets the class of the clicked card to open
           clicked.path[0].className = "card open show";
-
+          openCards.push(classClicked);
+          mouseEvent.push(clicked.path[0]);
             //checking if there are already two matching cards
             if (openCards.length === 2) {
-              openCards = [];
+              lockboard = true;
+              setTimeout (function() {
+              mouseEvent[0].className = "card";
+              mouseEvent[1].className = "card";
               mouseEvent = [];
-            }
+              openCards = [];
+              lockboard = false;
 
-            else {
-              openCards.push(classClicked);
-              mouseEvent.push(clicked.path[0]);
+              }, 1000);
             }
-          break;
         }
 
         else if (classClicked === openCards[0]) {
@@ -114,12 +116,12 @@ let matchedCards = 0;
           openCards = [];
           mouseEvent = [];
           matchedCards++;
-          break;
+          //break;
         }
 
 
       }
-    }
+    //}
     //calls movesCount where it display the moveCounter to the HTML
     movesCount(moveCounter);
   }
