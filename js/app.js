@@ -3,8 +3,14 @@
  */
 
 // Initializing array cardClass to store the values of the icon classes
-var cardClass = ["fa fa-diamond", "fa fa-paper-plane-o", "fa fa-anchor", "fa fa-bolt", "fa fa-cube", "fa fa-leaf", "fa fa-bicycle", "fa fa-bomb",
-                  "fa fa-diamond", "fa fa-paper-plane-o", "fa fa-anchor", "fa fa-bolt", "fa fa-cube", "fa fa-leaf", "fa fa-bicycle", "fa fa-bomb", ];
+var cardClass = ["fa fa-diamond", "fa fa-paper-plane-o",
+                 "fa fa-anchor", "fa fa-bolt",
+                 "fa fa-cube", "fa fa-leaf",
+                 "fa fa-bicycle", "fa fa-bomb",
+                 "fa fa-diamond", "fa fa-paper-plane-o",
+                 "fa fa-anchor", "fa fa-bolt",
+                 "fa fa-cube", "fa fa-leaf",
+                 "fa fa-bicycle", "fa fa-bomb", ];
 
 //openCards is where the value of the opened cards are stored
 let openCards = [];
@@ -18,9 +24,22 @@ let moveCounter = 0;
 //matchedCards tracks how many matches there are already
 let matchedCards = 0;
 
+//player starting star count
+let starCount = 5;
+
 //lockboard variable will lock the board to prevent clicking more than two
 let lockboard = false;
-//function initializeDeck() {
+
+//active is a bollean variable to keep track of the time
+var active = false;
+
+initializeDeck();
+
+function initializeDeck() {
+  active = false;
+  moveCounter = 0;
+  starCount = 5;
+  matchedCards = 0;
 
   //assigning shuffled cardClass array into the same array
   cardClass = shuffle(cardClass);
@@ -28,12 +47,16 @@ let lockboard = false;
   //selecting the deck class and assigning it to deck object
   var deck = document.querySelector(".deck");
 
+  //assign card class to cards
+  var cards = document.querySelectorAll(".card");
+
   //selecting all <i> elements in the "deck" div class and assigning it to icons NodeList
   var icons = deck.querySelectorAll("i");
 
   //assigning shuffled classes to i elements of the icons NodeList using a for loop
   for(var i = 0; i < 16; i++) {
     icons[i].className = cardClass[i];
+    cards[i].className = "card";
   }
 
   // Shuffle function from http://stackoverflow.com/a/2450976
@@ -52,123 +75,157 @@ let lockboard = false;
 
     return copy;
   }
-  //Initiating event listener for the container class
-  var clickScreen = document.querySelector(".container");
-  clickScreen.addEventListener('click', function(event) {
-      if (lockboard) return;
-      checkClass(event);
-  });
+  resetTimer();
+  setStars();
+}//end initializeDeck
 
-  //function checkClass accepts a mouse event parameter and checks what class was clicked by the user.
-  function checkClass(clicked) {
-    //startTimer();
+//Initiating event listener for the container class
+var clickScreen = document.querySelector(".container");
+clickScreen.addEventListener('click', function(event) {
+    if (lockboard) return;
+    checkClass(event);
+});
 
-    //assigning the name of the class to the classclicked string
-    const classClicked = clicked.path[0].childNodes[1].className;
+var clickRepeat = clickScreen.querySelector(".fa.fa-repeat");
+clickRepeat.addEventListener('click', function() {
+  //initializeDeck();
+  location.reload();
+});
 
-    //for loop to check if cards are clicked
-    //for (var i = 0; i < cardClass.length; i++) {
+//function checkClass accepts a mouse event argument and checks what class was clicked by the user.
+function checkClass(clicked) {
 
-      //checks if the card that was clicked is a class of card
-      if (clicked.path[0].className === "card")
-      {
-        if (!active)
-        {
-          active = true;
-          startTimer();
+//assigning the name of the class to the classclicked string
+const classClicked = clicked.path[0].childNodes[1].className;
+
+  //calls movesCount where it display the moveCounter to the HTML
+  movesCount(moveCounter);
+  //checks if the card that was clicked is a class of card
+  if (clicked.path[0].className === "card")
+  {
+    //starts the timer
+    if (!active)
+    {
+      active = true;
+      startTimer();
+    }
+
+    //checking if class of card clicked is not the same as the initial card
+    if (classClicked !== openCards[0]) {
+
+      //calls showCard to flip card
+      showCard(clicked, classClicked);
+
+        //checking if there are already two opened cards
+        if (openCards.length === 2) {
+
+          //calling hideCards to hide the pair of cards
+          hideCards();
         }
+    }
 
-        //increment moveCounter
-        moveCounter++;
-        console.log(moveCounter);
-        console.log(openCards);
-        console.log(mouseEvent);
+    else if (classClicked === openCards[0]) {
 
-
-            //checks if there are already two open cards which sets a 1 sec delay
-
-
-        if (classClicked !== openCards[0]) {
-
-          //sets the class of the clicked card to open
-          clicked.path[0].className = "card open show";
-          openCards.push(classClicked);
-          mouseEvent.push(clicked.path[0]);
-            //checking if there are already two matching cards
-            if (openCards.length === 2) {
-              lockboard = true;
-              setTimeout (function() {
-              mouseEvent[0].className = "card";
-              mouseEvent[1].className = "card";
-              mouseEvent = [];
-              openCards = [];
-              lockboard = false;
-
-              }, 1000);
-            }
-        }
-
-        else if (classClicked === openCards[0]) {
-
-          //sets class of card to match
-          clicked.path[0].className = "card match";
-          mouseEvent[0].className = "card match";
-          openCards = [];
-          mouseEvent = [];
-          matchedCards++;
-          //break;
-        }
-
-
-      }
-    //}
-    //calls movesCount where it display the moveCounter to the HTML
-    movesCount(moveCounter);
-  }
-
-  function cardMatch(classOfCard) {
-
-  }
-
-  function movesCount(moveCounter) {
-    document.querySelector('.moves').innerHTML = moveCounter;
-
-  }
-
-  //active is a bollean variable to keep track of the time
-  var active = false;
-
-  //startTimer is a function that
-  function startTimer() {
-    if(active) {
-      var timer = document.getElementById("timer").innerHTML;
-      //split the time to two arrays
-      var time = timer.split(":");
-      var minutes = time[0];
-      var seconds = time[1];
-
-      if (seconds == 59) {
-        minutes++
-        seconds = 0;
-        if (minutes < 10) minutes = "0" + minutes;
-      }
-      else {
-        seconds++;
-        if (seconds < 10) seconds = "0" + seconds;
-      }
-
-      //update HTML timer ID on
-      document.getElementById("timer").innerHTML = minutes + ":" + seconds;
-      setTimeout(startTimer, 1000);
+      //calls cardMatch function to flip cards to match
+      cardMatch(clicked);
     }
   }
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
+
+  if (matchedCards === 8) {
+    var time = document.getElementById("timer").innerHTML;
+    gameFinish(time);
+  }
+}//end checkClass function
+
+//flip cards that matched and let it stay flipped
+function cardMatch(clicked) {
+  //sets class of card to match
+  clicked.path[0].className = "card match";
+  mouseEvent[0].className = "card match";
+  openCards = [];
+  mouseEvent = [];
+  matchedCards++;
+}//end cardMatch function
+
+//show cards that are clicked
+function showCard(clicked, classClicked) {
+  clicked.path[0].className = "card open show";
+  openCards.push(classClicked);
+  mouseEvent.push(clicked.path[0]);
+}//end showCard function
+
+//hide cards after clicking two dissimilar cards
+function hideCards() {
+  lockboard = true;
+  setTimeout (function() {
+  mouseEvent[0].className = "card";
+  mouseEvent[1].className = "card";
+  mouseEvent = [];
+  openCards = [];
+  lockboard = false;
+  moveCounter++;
+  //reduce star on move 10, 15, 20, 25
+  if (moveCounter === 10 || moveCounter === 15 || moveCounter === 20 || moveCounter === 25) reduceStar();
+
+  }, 1000);
+}//end hideCards function
+
+///counts the moves that the player has
+function movesCount(moveCounter) {
+  document.querySelector('.moves').innerHTML = moveCounter;
+}//end movesCount
+
+//reduce the stars the player has
+function reduceStar() {
+  let star = document.querySelectorAll(".fa.fa-star");
+  star[star.length - 1].className = "fa fa-star-o";
+  starCount--;
+}
+
+//player finished the game
+function gameFinish(time) {
+  var gameReset = confirm("Congratulations!\nYour Score is: " + starCount +
+                     " stars, and your time is: " + time +
+                     "\nPress OK to play again!!!");
+
+  if (gameReset) location.reload();
+}
+//startTimer is a function that
+function startTimer() {
+  if(active) {
+    var timer = document.getElementById("timer").innerHTML;
+    //split the time to two arrays
+    var time = timer.split(":");
+    var minutes = time[0];
+    var seconds = time[1];
+
+    if (seconds == 59) {
+      minutes++
+      seconds = "00";
+      if (minutes < 10) minutes = "0" + minutes;
+    }
+    else {
+      seconds++;
+      if (seconds < 10) seconds = "0" + seconds;
+    }
+
+    //update HTML timer ID on
+    document.getElementById("timer").innerHTML = minutes + ":" + seconds;
+    setTimeout(startTimer, 1000);
+  }
+}
+
+function resetTimer() {
+  clearTimeout(startTimer);
+  document.getElementById("timer").innerHTML =" 00:00";
+}
+
+function setStars() {
+  var initialStar = document.querySelector(".stars");
+
+  for (var i = 0; i < 5; i++) {
+    var newStar = document.createElement("li");
+    newStar.className = "fa fa-star";
+    initialStar.appendChild(newStar);
+  }
+}
