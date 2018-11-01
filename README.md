@@ -2,16 +2,17 @@
 
 ## Table of Contents
 
-* [Instructions](#instructions)
+* [Description](#description)
+* [How to Play](#howtoplay)
 * [Contributing](#contributing)
 
-## Instructions
+## Description
 
-The starter project has some HTML and CSS styling to display a static version of the Memory Game project. You'll need to convert this project from a static project to an interactive one. This will require modifying the HTML and CSS files, but primarily the JavaScript file.
+This repository is for the Udacity Memory Game Project. The project is a static webpage coded in HTML/CSS and Javascript. It implements the basics of Javascript DOM manipulation. 
 
-To get started, open `js/app.js` and start building out the app's functionality
+## How to Play
 
-For specific, detailed instructions, look at the project instructions in the [Udacity Classroom](https://classroom.udacity.com/me).
+The game starts when the player clicks on any card; at the same time, the timer starts. The cards will flip, revealing the symbol which the player will have to find its pair. Once a pair is found, the cards will stay flipped throughout the game. The game will end once all cards are revealed (a total of eight pairs). The player is then asked if he/she wants to play again. 
 
 ## Contributing
 
