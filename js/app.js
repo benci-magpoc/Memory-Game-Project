@@ -6,11 +6,9 @@
 var cardClass = ["fa fa-diamond", "fa fa-paper-plane-o",
                  "fa fa-anchor", "fa fa-bolt",
                  "fa fa-cube", "fa fa-leaf",
-                 "fa fa-bicycle", "fa fa-bomb",
-                 "fa fa-diamond", "fa fa-paper-plane-o",
-                 "fa fa-anchor", "fa fa-bolt",
-                 "fa fa-cube", "fa fa-leaf",
-                 "fa fa-bicycle", "fa fa-bomb", ];
+                 "fa fa-bicycle", "fa fa-bomb" ];
+
+cardClass = cardClass.concat(cardClass);
 
 //openCards is where the value of the opened cards are stored
 let openCards = [];
@@ -184,8 +182,8 @@ function reduceStar() {
 
 //player finished the game
 function gameFinish(time) {
-  var gameReset = confirm("Congratulations!\nYour Score is: " + starCount +
-                     " stars, and your time is: " + time +
+  var gameReset = confirm("Congratulations!\nYou have made " + moveCounter + " moves" +
+                     "\nYour Score is: " + starCount + " stars, and your time is: " + time +
                      "\nPress OK to play again!!!");
 
   if (gameReset) location.reload();
