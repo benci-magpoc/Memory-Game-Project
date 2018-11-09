@@ -5,6 +5,7 @@
 * [Description](#description)
 * [How to Play](#how-to-play)
 * [Contributor](#contributor)
+* [Dependencies](#dependencies)
 
 ## Description
 
@@ -17,3 +18,7 @@ The game starts when the player clicks on any card; at the same time, the timer 
 ## Contributor
 
 - Benci Magpoc <benciian@gmail.com>
+
+## Dependencies
+
+Bootstrap and Google Fonts.
