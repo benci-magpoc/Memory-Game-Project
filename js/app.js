@@ -78,7 +78,7 @@ function initializeDeck() {
 }//end initializeDeck
 
 //Initiating event listener for the container class
-var clickScreen = document.querySelector(".container");
+var clickScreen = document.querySelector(".deck");
 clickScreen.addEventListener('click', function(event) {
     if (lockboard) return;
     checkClass(event);
