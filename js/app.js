@@ -81,6 +81,8 @@ function initializeDeck() {
 var clickScreen = document.querySelector(".deck");
 clickScreen.addEventListener('click', function(event) {
     if (lockboard) return;
+    console.log(event);
+    console.log(event.target.className);
     checkClass(event);
 });
 
@@ -94,7 +96,7 @@ clickRepeat.addEventListener('click', function() {
 function checkClass(clicked) {
 
 //assigning the name of the class to the classclicked string
-const classClicked = clicked.path[0].childNodes[1].className;
+const classClicked = clicked.target.childNodes[1].className;
 
   //calls movesCount where it display the moveCounter to the HTML
   movesCount(moveCounter);
@@ -133,6 +135,7 @@ const classClicked = clicked.path[0].childNodes[1].className;
     var time = document.getElementById("timer").innerHTML;
     gameFinish(time);
   }
+
 }//end checkClass function
 
 //flip cards that matched and let it stay flipped
@@ -147,9 +150,10 @@ function cardMatch(clicked) {
 
 //show cards that are clicked
 function showCard(clicked, classClicked) {
-  clicked.path[0].className = "card open show";
+  clicked.target.className = "card open show";
   openCards.push(classClicked);
   mouseEvent.push(clicked.path[0]);
+  console.log(clicked, classClicked);
 }//end showCard function
 
 //hide cards after clicking two dissimilar cards
