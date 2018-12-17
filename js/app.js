@@ -96,12 +96,12 @@ clickRepeat.addEventListener('click', function() {
 function checkClass(clicked) {
 
 //assigning the name of the class to the classclicked string
-const classClicked = clicked.path[0].childNodes[1].className;
+const classClicked = clicked.target.firstElementChild.className;
 
   //calls movesCount where it display the moveCounter to the HTML
   movesCount(moveCounter);
   //checks if the card that was clicked is a class of card
-  if (clicked.path[0].className === "card")
+  if (clicked.target.className === "card")
   {
     //starts the timer
     if (!active)
@@ -141,7 +141,7 @@ const classClicked = clicked.path[0].childNodes[1].className;
 //flip cards that matched and let it stay flipped
 function cardMatch(clicked) {
   //sets class of card to match
-  clicked.path[0].className = "card match";
+  clicked.target.className = "card match";
   mouseEvent[0].className = "card match";
   openCards = [];
   mouseEvent = [];
@@ -152,7 +152,7 @@ function cardMatch(clicked) {
 function showCard(clicked, classClicked) {
   clicked.target.className = "card open show";
   openCards.push(classClicked);
-  mouseEvent.push(clicked.path[0]);
+  mouseEvent.push(clicked.target);
   console.log(clicked, classClicked);
 }//end showCard function
 
