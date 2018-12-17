@@ -84,7 +84,7 @@ clickScreen.addEventListener('click', function(event) {
     checkClass(event);
 });
 
-var clickRepeat = clickScreen.querySelector(".fa.fa-repeat");
+var clickRepeat = document.querySelector(".fa.fa-repeat");
 clickRepeat.addEventListener('click', function() {
   //initializeDeck();
   location.reload();
