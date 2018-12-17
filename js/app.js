@@ -84,6 +84,11 @@ clickScreen.addEventListener('click', function(event) {
     checkClass(event);
 });
 
+clickScreen.addEventListener('touchstart', function(event) {
+    if (lockboard) return;
+    checkClass(event);
+});
+
 var clickRepeat = document.querySelector(".fa.fa-repeat");
 clickRepeat.addEventListener('click', function() {
   //initializeDeck();
