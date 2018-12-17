@@ -50,6 +50,7 @@ h1 {
     justify-content: space-between;
     align-items: center;
     margin: 0 0 3em;
+    cursor: pointer;
 }
 
 .deck .card {
