@@ -101,7 +101,7 @@ const classClicked = clicked.path[0].childNodes[1].className;
   //calls movesCount where it display the moveCounter to the HTML
   movesCount(moveCounter);
   //checks if the card that was clicked is a class of card
-  if (clicked.target.className === "card")
+  if (clicked.path[0].className === "card")
   {
     //starts the timer
     if (!active)
