@@ -96,7 +96,7 @@ clickRepeat.addEventListener('click', function() {
 function checkClass(clicked) {
 
 //assigning the name of the class to the classclicked string
-const classClicked = clicked.target.childNodes[1].className;
+const classClicked = clicked.path[0].childNodes[1].className;
 
   //calls movesCount where it display the moveCounter to the HTML
   movesCount(moveCounter);
